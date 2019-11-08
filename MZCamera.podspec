@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MZCamera'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
   s.summary          = 'A short description of MZCamera.'
 
 # This description is used to generate tags and improve search results.
@@ -29,7 +29,7 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.swift_version = '4.2'
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.0'
   s.ios.vendored_frameworks = 'MZCamera.framework'
 
   s.source_files = 'MZCamera/Classes/**/*'
@@ -40,7 +40,7 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.libraries = 'z'
-  s.frameworks = 'CoreMedia', 'CoreVideo', 'AudioToolbox', 'VideoToolbox', 'AVFoundation'
+  s.frameworks = 'CoreMedia', 'CoreVideo', 'AudioToolbox', 'VideoToolbox', 'AVFoundation', 'ARKit'
   s.dependency 'MZStreamCore'
   s.dependency 'MZStreamNetwork'
 end
