@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MZCamera'
-  s.version          = '0.1.3'
+  s.version          = '0.1.4'
   s.summary          = 'A short description of MZCamera.'
 
 # This description is used to generate tags and improve search results.
@@ -43,4 +43,6 @@ TODO: Add long description of the pod here.
   s.frameworks = 'CoreMedia', 'CoreVideo', 'AudioToolbox', 'VideoToolbox', 'AVFoundation', 'ARKit'
   s.dependency 'MZStreamCore'
   s.dependency 'MZStreamNetwork'
+  s.dependency 'MetalPetal'
+  s.dependency 'MetalPetal/Swift'
 end
