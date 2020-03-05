@@ -191,6 +191,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @import QuartzCore;
 @import SceneKit;
 @import UIKit;
+@import WebRTC;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -238,6 +239,19 @@ SWIFT_PROTOCOL("_TtP8MZCamera21AudioRecorderDelegate_")
 - (void)renderer:(id <SCNSceneRenderer> _Nonnull)renderer didRenderScene:(SCNScene * _Nonnull)scene atTime:(NSTimeInterval)time;
 @end
 
+@protocol RoomVideoTrack;
+
+SWIFT_PROTOCOL("_TtP8MZCamera17RoomVideoDelegate_")
+@protocol RoomVideoDelegate
+@optional
+- (void)roomVideoDidConnectSignalServer;
+- (void)roomVideoDidSendWithPeerId:(NSString * _Nonnull)peerId and:(id <RoomVideoTrack> _Nonnull)videoTrack;
+- (void)roomVideoDidLeaveWithPeerId:(NSString * _Nonnull)peerId;
+- (void)roomVideoDidSendWithLimitMessage:(NSString * _Nonnull)limitMessage;
+- (void)roomVideoWithPeerId:(NSString * _Nonnull)peerId didUpdateVideo:(BOOL)enable;
+- (void)roomVideoDidLeave;
+@end
+
 @class VideoPipeline;
 @class MP4SegmentDescriptor;
 @class TrafficMonitor;
@@ -245,7 +259,7 @@ SWIFT_PROTOCOL("_TtP8MZCamera21AudioRecorderDelegate_")
 @class TrafficAlert;
 
 SWIFT_PROTOCOL("_TtP8MZCamera21VideoPipelineDelegate_")
-@protocol VideoPipelineDelegate
+@protocol VideoPipelineDelegate <RoomVideoDelegate>
 @optional
 - (void)pipelineMP4FileRecorded:(NSURL * _Nonnull)filePath;
 - (void)pipelineStateChanged:(VideoPipeline * _Nonnull)sender;
@@ -268,6 +282,12 @@ SWIFT_PROTOCOL("_TtP8MZCamera21VideoPipelineDelegate_")
 - (void)trafficStateChanged:(TrafficMonitor * _Nonnull)monitor;
 - (void)trafficStatisticChange:(TrafficSummary * _Nonnull)summary;
 - (void)trafficNetworkChange:(TrafficAlert * _Nonnull)alert;
+- (void)roomVideoDidConnectSignalServer;
+- (void)roomVideoDidSendWithPeerId:(NSString * _Nonnull)peerId and:(id <RoomVideoTrack> _Nonnull)videoTrack;
+- (void)roomVideoDidLeaveWithPeerId:(NSString * _Nonnull)peerId;
+- (void)roomVideoDidSendWithLimitMessage:(NSString * _Nonnull)limitMessage;
+- (void)roomVideoWithPeerId:(NSString * _Nonnull)peerId didUpdateVideo:(BOOL)enable;
+- (void)roomVideoDidLeave;
 @end
 
 @class ARSCNView;
@@ -341,7 +361,7 @@ SWIFT_CLASS("_TtC8MZCamera6Camera")
 @class UIImage;
 
 SWIFT_PROTOCOL("_TtP8MZCamera14CameraDelegate_")
-@protocol CameraDelegate
+@protocol CameraDelegate <RoomVideoDelegate>
 @optional
 - (void)cameraMP4FileRecorded:(NSURL * _Nonnull)filePath;
 - (void)cameraImageTaken:(UIImage * _Nonnull)image;
@@ -368,6 +388,8 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 
 
 
+
+
 @interface CameraFacade (SWIFT_EXTENSION(MZCamera)) <VideoPipelineDelegate>
 - (void)pipelineMP4FileRecorded:(NSURL * _Nonnull)filePath;
 - (void)pipelineStateChanged:(VideoPipeline * _Nonnull)sender;
@@ -377,14 +399,21 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 - (void)trafficStateChanged:(TrafficMonitor * _Nonnull)monitor;
 - (void)trafficStatisticChange:(TrafficSummary * _Nonnull)summary;
 - (void)trafficNetworkChange:(TrafficAlert * _Nonnull)alert;
+- (void)roomVideoDidConnectSignalServer;
+- (void)roomVideoDidSendWithPeerId:(NSString * _Nonnull)peerId and:(id <RoomVideoTrack> _Nonnull)videoTrack;
+- (void)roomVideoDidLeaveWithPeerId:(NSString * _Nonnull)peerId;
+- (void)roomVideoDidSendWithLimitMessage:(NSString * _Nonnull)limitMessage;
+- (void)roomVideoWithPeerId:(NSString * _Nonnull)peerId didUpdateVideo:(BOOL)enable;
+- (void)roomVideoDidLeave;
 @end
 
 
 SWIFT_PROTOCOL("_TtP8MZCamera20CameraFacadeDelegate_")
-@protocol CameraFacadeDelegate
+@protocol CameraFacadeDelegate <RoomVideoDelegate>
 @optional
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade token:(UIImage * _Nonnull)image;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade recordedfile:(NSURL * _Nonnull)recordedfile;
+- (void)cameraWithFacade:(CameraFacade * _Nonnull)facade videoPipelineStateChange:(VideoPipeline * _Nonnull)videoPipelineStateChange;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade segment:(NSData * _Null_unspecified)data trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType initSegment:(BOOL)initSegment rap:(BOOL)randomAccessPoint segmentIndex:(NSUInteger)segmentIndex fragmentIndex:(NSUInteger)fragmentIndex segmentStart:(BOOL)segmentStart timestamp:(double)firstPts;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade mediaPlaylist:(NSString * _Null_unspecified)mediaPlaylist trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade rootPlaylist:(NSString * _Null_unspecified)rootPlaylist;
@@ -408,25 +437,63 @@ SWIFT_CLASS("_TtC8MZCamera20CameraViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class MTIImage;
+
+SWIFT_PROTOCOL("_TtP8MZCamera20MediaPreviewProtocol_")
+@protocol MediaPreviewProtocol <RTCVideoRenderer>
+- (void)updateWithFrame:(CGRect)frame;
+- (void)renderWithImage:(MTIImage * _Nonnull)image;
+@end
+
+@class RTCVideoFrame;
+
+SWIFT_CLASS("_TtC8MZCamera12MediaPreview")
+@interface MediaPreview : UIView <MediaPreviewProtocol>
+- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder SWIFT_UNAVAILABLE;
+- (void)awakeFromNib;
+- (void)updateWithFrame:(CGRect)frame;
+- (void)renderWithImage:(MTIImage * _Nonnull)image;
+- (void)removeFromSuperview;
+- (void)layoutSubviews;
+- (void)setSize:(CGSize)size;
+- (void)renderFrame:(RTCVideoFrame * _Nullable)frame;
+@end
+
+
+
+
+
+
+
+
+
+
+
+SWIFT_PROTOCOL("_TtP8MZCamera14RoomVideoTrack_")
+@protocol RoomVideoTrack
+- (NSString * _Nonnull)getTrackId SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+@interface RTCVideoTrack (SWIFT_EXTENSION(MZCamera)) <RoomVideoTrack>
+- (NSString * _Nonnull)getTrackId SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+
 
 
 
 SWIFT_CLASS("_TtC8MZCamera13VideoPipeline")
 @interface VideoPipeline : NSObject
+- (void)toggleVideoWithIsEnabled:(BOOL)isEnabled;
+- (void)toggleAudioWithIsEnabled:(BOOL)isEnabled;
+- (void)stopStreamingWithLeave:(BOOL)leave;
+- (void)startLiveStreamingWithId:(NSString * _Nonnull)id audioOnly:(BOOL)audioOnly;
+- (void)startChunkedVideoRecording;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
-@end
-
-
-@interface VideoPipeline (SWIFT_EXTENSION(MZCamera)) <FrameQueueDelegate>
-- (void)frameDequeued:(CMSampleBufferRef _Nonnull)sampleBuffer;
-@end
-
-
-
-
-@interface VideoPipeline (SWIFT_EXTENSION(MZCamera)) <FDKAACEncoderDelegate>
-- (void)compressedAudioDataReceived:(uint8_t * _Null_unspecified)data size:(NSInteger)size pts:(CMTime)pts;
 @end
 
 
@@ -435,15 +502,10 @@ SWIFT_CLASS("_TtC8MZCamera13VideoPipeline")
 @end
 
 
-
-
-
-
-@interface VideoPipeline (SWIFT_EXTENSION(MZCamera)) <LiveStreamerConsolidatedDelegate>
-- (void)segmentDataReceived:(NSData * _Null_unspecified)data trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType initSegment:(BOOL)initSegment rap:(BOOL)randomAccessPoint segmentIndex:(NSUInteger)segmentIndex fragmentIndex:(NSUInteger)fragmentIndex segmentStart:(BOOL)segmentStart timestamp:(double)firstPts;
-- (void)playlistData:(NSString * _Null_unspecified)playlist trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType;
-- (void)rootPlaylistData:(NSString * _Null_unspecified)playlist;
-- (void)consolidatedDataReceived:(NSArray<MP4SegmentDescriptor *> * _Null_unspecified)descriptors;
+@interface VideoPipeline (SWIFT_EXTENSION(MZCamera)) <FDKAACEncoderDelegate>
+- (BOOL)audioSamplingSupported SWIFT_WARN_UNUSED_RESULT;
+- (void)createAudioTranscoder;
+- (void)compressedAudioDataReceived:(uint8_t * _Null_unspecified)data size:(NSInteger)size pts:(CMTime)pts;
 @end
 
 

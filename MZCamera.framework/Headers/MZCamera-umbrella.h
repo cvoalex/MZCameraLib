@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "MZVideoCapturer.h"
 
 FOUNDATION_EXPORT double MZCameraVersionNumber;
 FOUNDATION_EXPORT const unsigned char MZCameraVersionString[];
