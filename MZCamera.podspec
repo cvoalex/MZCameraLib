@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MZCamera'
-  s.version          = '0.1.6'
+  s.version          = '0.1.7'
   s.summary          = 'A short description of MZCamera.'
 
 # This description is used to generate tags and improve search results.
@@ -43,6 +43,12 @@ TODO: Add long description of the pod here.
   s.frameworks = 'CoreMedia', 'CoreVideo', 'AudioToolbox', 'VideoToolbox', 'AVFoundation', 'ARKit'
   s.dependency 'MZStreamCore'
   s.dependency 'MZStreamNetwork'
+  s.dependency 'MZRTC'
   s.dependency 'MetalPetal'
   s.dependency 'MetalPetal/Swift'
+  s.xcconfig = {
+      # GoogleWebRTC (MZRTC) wasn't compiled with bitcode
+     'ENABLE_BITCODE' => 'NO'
+  }
+  s.vendored_frameworks = 'DeepAR.framework'
 end
