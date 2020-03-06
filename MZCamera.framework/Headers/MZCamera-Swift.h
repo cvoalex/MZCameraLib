@@ -390,15 +390,7 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 
 
 
-@interface CameraFacade (SWIFT_EXTENSION(MZCamera)) <VideoPipelineDelegate>
-- (void)pipelineMP4FileRecorded:(NSURL * _Nonnull)filePath;
-- (void)pipelineStateChanged:(VideoPipeline * _Nonnull)sender;
-- (void)segmentDataReceived:(NSData * _Null_unspecified)data trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType initSegment:(BOOL)initSegment rap:(BOOL)randomAccessPoint segmentIndex:(NSUInteger)segmentIndex fragmentIndex:(NSUInteger)fragmentIndex segmentStart:(BOOL)segmentStart timestamp:(double)firstPts;
-- (void)playlistData:(NSString * _Null_unspecified)playlist trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType;
-- (void)rootPlaylistData:(NSString * _Null_unspecified)playlist;
-- (void)trafficStateChanged:(TrafficMonitor * _Nonnull)monitor;
-- (void)trafficStatisticChange:(TrafficSummary * _Nonnull)summary;
-- (void)trafficNetworkChange:(TrafficAlert * _Nonnull)alert;
+@interface CameraFacade (SWIFT_EXTENSION(MZCamera))
 - (void)roomVideoDidConnectSignalServer;
 - (void)roomVideoDidSendWithPeerId:(NSString * _Nonnull)peerId and:(id <RoomVideoTrack> _Nonnull)videoTrack;
 - (void)roomVideoDidLeaveWithPeerId:(NSString * _Nonnull)peerId;
@@ -408,8 +400,22 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 @end
 
 
+
+
+@interface CameraFacade (SWIFT_EXTENSION(MZCamera)) <VideoPipelineDelegate>
+- (void)pipelineMP4FileRecorded:(NSURL * _Nonnull)filePath;
+- (void)pipelineStateChanged:(VideoPipeline * _Nonnull)sender;
+- (void)segmentDataReceived:(NSData * _Null_unspecified)data trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType initSegment:(BOOL)initSegment rap:(BOOL)randomAccessPoint segmentIndex:(NSUInteger)segmentIndex fragmentIndex:(NSUInteger)fragmentIndex segmentStart:(BOOL)segmentStart timestamp:(double)firstPts;
+- (void)playlistData:(NSString * _Null_unspecified)playlist trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType;
+- (void)rootPlaylistData:(NSString * _Null_unspecified)playlist;
+- (void)trafficStateChanged:(TrafficMonitor * _Nonnull)monitor;
+- (void)trafficStatisticChange:(TrafficSummary * _Nonnull)summary;
+- (void)trafficNetworkChange:(TrafficAlert * _Nonnull)alert;
+@end
+
+
 SWIFT_PROTOCOL("_TtP8MZCamera20CameraFacadeDelegate_")
-@protocol CameraFacadeDelegate <RoomVideoDelegate>
+@protocol CameraFacadeDelegate
 @optional
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade token:(UIImage * _Nonnull)image;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade recordedfile:(NSURL * _Nonnull)recordedfile;
@@ -445,22 +451,29 @@ SWIFT_PROTOCOL("_TtP8MZCamera20MediaPreviewProtocol_")
 - (void)renderWithImage:(MTIImage * _Nonnull)image;
 @end
 
-@class RTCVideoFrame;
 
 SWIFT_CLASS("_TtC8MZCamera12MediaPreview")
 @interface MediaPreview : UIView <MediaPreviewProtocol>
-- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder SWIFT_UNAVAILABLE;
-- (void)awakeFromNib;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
 - (void)updateWithFrame:(CGRect)frame;
 - (void)renderWithImage:(MTIImage * _Nonnull)image;
 - (void)removeFromSuperview;
 - (void)layoutSubviews;
-- (void)setSize:(CGSize)size;
-- (void)renderFrame:(RTCVideoFrame * _Nullable)frame;
+- (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
 @end
 
 
+
+
+
+
+
+@class RTCVideoFrame;
+
+@interface MediaPreview (SWIFT_EXTENSION(MZCamera))
+- (void)setSize:(CGSize)size;
+- (void)renderFrame:(RTCVideoFrame * _Nullable)frame;
+@end
 
 
 
