@@ -458,6 +458,7 @@ SWIFT_CLASS("_TtC8MZCamera12MediaPreview")
 - (void)updateWithFrame:(CGRect)frame;
 - (void)renderWithImage:(MTIImage * _Nonnull)image;
 - (void)removeFromSuperview;
+- (void)willMoveToSuperview:(UIView * _Nullable)newSuperview;
 - (void)layoutSubviews;
 - (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
 @end
