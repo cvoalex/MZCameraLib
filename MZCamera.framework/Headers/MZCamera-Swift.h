@@ -185,6 +185,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @import AVFoundation;
 @import CoreGraphics;
 @import CoreMedia;
+@import DeepAR;
 @import Foundation;
 @import MZStreamCore;
 @import ObjectiveC;
@@ -309,6 +310,16 @@ SWIFT_CLASS("_TtC8MZCamera25ARKitCameraViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+SWIFT_CLASS("_TtC8MZCamera14ARStatefulView")
+@interface ARStatefulView : ARView
+- (void)pause;
+- (void)resume;
+- (void)startFrameOutputWithXmin:(float)Xmin Xmax:(float)Xmax Ymin:(float)Ymin Ymax:(float)Ymax scale:(float)scale;
+- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class AVCaptureOutput;
 @class AVCaptureConnection;
 
@@ -380,6 +391,8 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
 @end
+
+
 
 
 
