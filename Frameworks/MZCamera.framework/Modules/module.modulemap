@@ -1,0 +1,11 @@
+framework module MZCamera {
+  umbrella header "MZCamera-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module MZCamera.Swift {
+    header "MZCamera-Swift.h"
+    requires objc
+}
