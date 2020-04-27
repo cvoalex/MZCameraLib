@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MZCamera'
-  s.version          = '0.1.11'
+  s.version          = '0.1.2'
   s.summary          = 'A short description of MZCamera.'
 
 # This description is used to generate tags and improve search results.
@@ -29,25 +29,33 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.swift_version = '4.2'
-  s.ios.deployment_target = '12.0'
-  s.ios.vendored_frameworks = 'MZCamera.framework'
+  s.ios.deployment_target = '12.2'
+  s.static_framework = false
 
-  # s.source_files = 'MZCamera/Classes/**/*'
+  
   # s.resource_bundles = {
-  #   'MZCameraEffects' => ['MZCamera/Assets/Effects/*']
+  #   'MZCamera' => ['MZCamera/Assets/*.png']
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.libraries = 'z'
   s.frameworks = 'CoreMedia', 'CoreVideo', 'AudioToolbox', 'VideoToolbox', 'AVFoundation', 'ARKit'
   s.dependency 'MZStreamCore'
-  s.dependency 'MZStreamNetwork'
-  s.dependency 'MZRTC'
   s.dependency 'MetalPetal'
   s.dependency 'MetalPetal/Swift'
+  
+  
+  # s.source_files = [
+  #   'MZCamera/Classes/App/**/*.{swift,h,m}',
+  # ]
+  s.dependency 'MZCameraCore'
+  # s.resource_bundles = {
+  #   'MZCameraEffects' => ['MZCamera/Assets/Effects/*']
+  # }
   s.xcconfig = {
-      # GoogleWebRTC (MZRTC) wasn't compiled with bitcode
-     'ENABLE_BITCODE' => 'NO'
+    # GoogleWebRTC (MZRTC) wasn't compiled with bitcode
+    'ENABLE_BITCODE' => 'NO',
   }
-  s.vendored_frameworks = 'DeepAR.framework'
+  s.vendored_frameworks = ['Frameworks/DeepAR.framework', 'Frameworks/MZCamera.framework'] # we don't need DeepAR in app extension
+  
 end
