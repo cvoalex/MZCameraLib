@@ -230,9 +230,30 @@ SWIFT_CLASS("_TtC12MZCameraCore12MZConnection")
 @end
 
 
+SWIFT_CLASS("_TtC12MZCameraCore17MZParticipantList")
+@interface MZParticipantList : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12MZCameraCore17MZParticipantType")
+@interface MZParticipantType : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+@end
+
+
 SWIFT_CLASS("_TtC12MZCameraCore10MZPeerInfo")
 @interface MZPeerInfo : NSObject
 @property (nonatomic, readonly, copy) NSString * _Nonnull debugDescription;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12MZCameraCore10MZUserInfo")
+@interface MZUserInfo : NSObject
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
 @end
@@ -297,6 +318,10 @@ SWIFT_PROTOCOL("_TtP12MZCameraCore17RoomVideoDelegate_")
 - (void)roomVideoDidUpdateWithPeerId:(NSString * _Nonnull)peerId sdp:(NSString * _Nonnull)sdp;
 - (void)roomVideoDidSendWithLimitMessage:(NSString * _Nonnull)limitMessage;
 - (void)roomVideoWithPeerId:(NSString * _Nonnull)peerId didUpdateVideo:(BOOL)enable;
+- (void)roomVideoDidReceiveWithParticipants:(MZParticipantList * _Nonnull)list joinedWithType:(MZParticipantType * _Nonnull)type;
+- (void)roomVideoDidReceivePubRequestFrom:(MZUserInfo * _Nonnull)user;
+- (void)roomVideoDidReceivePubAcceptFrom:(NSString * _Nonnull)userId;
+- (void)roomVideoDidReceivePubRejectFrom:(NSString * _Nonnull)userId;
 - (void)roomVideoDidLeave;
 @end
 
@@ -307,7 +332,7 @@ SWIFT_CLASS("_TtC12MZCameraCore13VideoPipeline")
 - (void)toggleVideoWithIsEnabled:(BOOL)isEnabled;
 - (void)toggleAudioWithIsEnabled:(BOOL)isEnabled;
 - (void)stopStreamingWithLeave:(BOOL)leave;
-- (void)startLiveStreamingWithId:(NSString * _Nonnull)id audioOnly:(BOOL)audioOnly;
+- (void)startLiveStreamingWithId:(NSString * _Nonnull)id video:(BOOL)video audio:(BOOL)audio;
 - (void)startChunkedVideoRecording;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
@@ -316,7 +341,7 @@ SWIFT_CLASS("_TtC12MZCameraCore13VideoPipeline")
 
 SWIFT_CLASS("_TtC12MZCameraCore19StreamVideoPipeline")
 @interface StreamVideoPipeline : VideoPipeline
-- (void)startLiveStreamingWithId:(NSString * _Nonnull)id audioOnly:(BOOL)audioOnly;
+- (void)startLiveStreamingWithId:(NSString * _Nonnull)id video:(BOOL)video audio:(BOOL)audio;
 - (void)startChunkedVideoRecording;
 - (void)stopStreamingWithLeave:(BOOL)leave;
 - (BOOL)audioSamplingSupported SWIFT_WARN_UNUSED_RESULT;
@@ -425,7 +450,7 @@ SWIFT_CLASS("_TtC12MZCameraCore19WebRTCVideoPipeline")
 - (void)toggleVideoWithIsEnabled:(BOOL)isEnabled;
 - (void)toggleAudioWithIsEnabled:(BOOL)isEnabled;
 - (void)stopStreamingWithLeave:(BOOL)leave;
-- (void)startLiveStreamingWithId:(NSString * _Nonnull)id audioOnly:(BOOL)audioOnly;
+- (void)startLiveStreamingWithId:(NSString * _Nonnull)id video:(BOOL)video audio:(BOOL)audio;
 - (void)startChunkedVideoRecording;
 - (BOOL)audioSamplingSupported SWIFT_WARN_UNUSED_RESULT;
 - (void)createAudioTranscoder;
