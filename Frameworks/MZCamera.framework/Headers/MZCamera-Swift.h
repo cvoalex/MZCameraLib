@@ -389,6 +389,9 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 @end
 
 @protocol RoomMediaStream;
+@class MZParticipantList;
+@class MZParticipantType;
+@class MZUserInfo;
 
 @interface CameraFacade (SWIFT_EXTENSION(MZCamera))
 - (void)roomVideoDidSendWithPeerId:(NSString * _Nonnull)peerId and:(id <RoomVideoTrack> _Nonnull)videoTrack;
@@ -401,6 +404,10 @@ SWIFT_CLASS("_TtC8MZCamera12CameraFacade")
 - (void)roomVideoDidConnectSignalServer;
 - (void)roomVideoDidDisconnectSignalServer;
 - (void)roomVideoDidSendWithPeerId:(NSString * _Nonnull)peerId mediaStream:(id <RoomMediaStream> _Nonnull)mediaStream;
+- (void)roomVideoDidReceiveWithParticipants:(MZParticipantList * _Nonnull)list joinedWithType:(MZParticipantType * _Nonnull)type;
+- (void)roomVideoDidReceivePubRequestFrom:(MZUserInfo * _Nonnull)from;
+- (void)roomVideoDidReceivePubAcceptFrom:(NSString * _Nonnull)userId;
+- (void)roomVideoDidReceivePubRejectFrom:(NSString * _Nonnull)userId;
 @end
 
 @class MZPeerInfo;
@@ -414,6 +421,10 @@ SWIFT_PROTOCOL("_TtP8MZCamera20CameraFacadeDelegate_")
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade segment:(NSData * _Null_unspecified)data trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType initSegment:(BOOL)initSegment rap:(BOOL)randomAccessPoint segmentIndex:(NSUInteger)segmentIndex fragmentIndex:(NSUInteger)fragmentIndex segmentStart:(BOOL)segmentStart timestamp:(double)firstPts;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade mediaPlaylist:(NSString * _Null_unspecified)mediaPlaylist trackID:(uint32_t)trackID mediaType:(AVMediaType _Null_unspecified)mediaType;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade rootPlaylist:(NSString * _Null_unspecified)rootPlaylist;
+- (void)cameraWithFacade:(CameraFacade * _Nonnull)facade receive:(MZParticipantList * _Nonnull)list and:(MZParticipantType * _Nonnull)type;
+- (void)cameraWithFacade:(CameraFacade * _Nonnull)facade receivePublishRequest:(MZUserInfo * _Nonnull)from;
+- (void)cameraWithFacade:(CameraFacade * _Nonnull)facade receivePublishAccept:(NSString * _Nonnull)from;
+- (void)cameraWithFacade:(CameraFacade * _Nonnull)facade receivePublishReject:(NSString * _Nonnull)from;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade didUpdateVideoConnection:(MZPeerInfo * _Nonnull)peer sdpInfo:(NSString * _Nonnull)sdpInfo;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade didJoin:(MZPeerInfo * _Nonnull)peer;
 - (void)cameraWithFacade:(CameraFacade * _Nonnull)facade didLeave:(MZPeerInfo * _Nonnull)peer;
@@ -489,7 +500,7 @@ SWIFT_CLASS("_TtC8MZCamera12MediaPreview")
 SWIFT_CLASS("_TtC8MZCamera18VideoPipelineProxy")
 @interface VideoPipelineProxy : NSObject
 - (void)putVideoSampleWithSampleBuffer:(CMSampleBufferRef _Nonnull)sampleBuffer;
-- (void)startLiveStreamingWithId:(NSString * _Nonnull)id audioOnly:(BOOL)audioOnly;
+- (void)startLiveStreamingWithId:(NSString * _Nonnull)id video:(BOOL)video audio:(BOOL)audio;
 - (void)stop;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
